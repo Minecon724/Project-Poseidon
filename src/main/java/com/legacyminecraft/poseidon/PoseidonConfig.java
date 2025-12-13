@@ -3,6 +3,8 @@ package com.legacyminecraft.poseidon;
 import org.bukkit.util.config.Configuration;
 
 import java.io.File;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -11,6 +13,7 @@ public class PoseidonConfig extends Configuration {
     private static PoseidonConfig singleton;
     private final int configVersion = 5;
     private Integer[] treeBlacklistIDs;
+    private InetAddress allowedProxyAddress;
 
     public Integer[] getTreeBlacklistIDs() {
         return treeBlacklistIDs;
@@ -42,6 +45,15 @@ public class PoseidonConfig extends Configuration {
         if (!this.getConfigString("settings.uuid-fetcher.method.value").equalsIgnoreCase("POST") && !this.getConfigString("settings.uuid-fetcher.method.value").equalsIgnoreCase("GET")) {
             System.out.println("[Poseidon] Config: settings.uuid-fetcher.method.value is not POST or GET. Changing to POST.");
             this.setProperty("settings.uuid-fetcher.method.value", "POST");
+        }
+
+        if (this.getConfigBoolean("settings.release2beta.enable-ip-pass-through")) {
+            try {
+                allowedProxyAddress = InetAddress.getByName(this.getConfigString("settings.release2beta.proxy-ip"));
+            } catch (UnknownHostException e) {
+                System.out.println("[Poseidon] Config: settings.release2beta.proxy-ip is invalid, falling back to 127.0.0.1");
+                this.setProperty("settings.release2beta.proxy-ip", "127.0.0.1");
+            }
         }
     }
 
@@ -390,6 +402,20 @@ public class PoseidonConfig extends Configuration {
             PoseidonConfig.singleton = new PoseidonConfig();
         }
         return PoseidonConfig.singleton;
+    }
+
+    public InetAddress getAllowedProxyAddress() {
+        if (allowedProxyAddress == null) {
+            try {
+                allowedProxyAddress = InetAddress.getByName(this.getConfigString("settings.release2beta.proxy-ip"));
+            } catch (UnknownHostException e) {
+                // validation should have prevented this
+                System.out.println("[Poseidon] Config: settings.release2beta.proxy-ip is invalid, falling back to 127.0.0.1");
+                allowedProxyAddress = InetAddress.getLoopbackAddress();
+            }
+        }
+
+        return allowedProxyAddress;
     }
 
 }

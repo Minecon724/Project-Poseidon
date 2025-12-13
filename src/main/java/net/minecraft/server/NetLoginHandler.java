@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.CraftServer;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Random;
@@ -132,6 +133,7 @@ public class NetLoginHandler extends NetHandler {
         } else {
             connectionType = ConnectionType.NORMAL;
         }
+
         rawConnectionType = packet1login.d;
         //TODO: We need to find a better and cleaner way to support these different Beta proxies, Maybe a handler class???
         if ((Boolean) PoseidonConfig.getInstance().getConfigOption("settings.bungeecord.bungee-mode.enable") && !connectionType.equals(ConnectionType.BUNGEECORD_OFFLINE_MODE_IP_FORWARDING) && !connectionType.equals(ConnectionType.BUNGEECORD_ONLINE_MODE_IP_FORWARDING)) {
@@ -143,8 +145,11 @@ public class NetLoginHandler extends NetHandler {
         if (connectionType.equals(ConnectionType.RELEASE2BETA_OFFLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.RELEASE2BETA_ONLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.BUNGEECORD_OFFLINE_MODE_IP_FORWARDING) || connectionType.equals(ConnectionType.BUNGEECORD_ONLINE_MODE_IP_FORWARDING)) {
             //Proxy has IP Forwarding enabled
             if ((Boolean) PoseidonConfig.getInstance().getConfigOption("settings.release2beta.enable-ip-pass-through")) {
+                InetAddress clientAddress = this.getSocket().getInetAddress();
+                InetAddress allowedAddress = PoseidonConfig.getInstance().getAllowedProxyAddress();
+
                 //IP Forwarding is enabled server side
-                if (this.getSocket().getInetAddress().getHostAddress().equalsIgnoreCase(String.valueOf(PoseidonConfig.getInstance().getConfigOption("settings.release2beta.proxy-ip", "127.0.0.1")))) {
+                if (clientAddress.equals(allowedAddress)) {
                     //Release2Beta server is authorized - Override IP address
                     InetSocketAddress address = deserializeAddress(packet1login.c);
                     a.info(packet1login.name + " has been detected using Release2Beta, using the IP passed through: " + address.getAddress().getHostAddress());

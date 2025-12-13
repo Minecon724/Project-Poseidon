@@ -1,7 +1,12 @@
 package com.legacyminecraft.poseidon.util;
 
+import com.google.common.primitives.Longs;
+
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 
 public class Release2Beta {
 
@@ -14,7 +19,14 @@ public class Release2Beta {
     }
 
     public static InetSocketAddress deserializeAddress(long spoofedAddress) {
-        String realAddress = longToIp(spoofedAddress);
+        String realAddress;
+        // check the least significant bits
+        if ((spoofedAddress >> 32) != 0) {
+            realAddress = longToIpv6(spoofedAddress);
+        } else {
+            realAddress = longToIp(spoofedAddress);
+        }
+
         return new InetSocketAddress(realAddress, 0);
     }
 
@@ -48,6 +60,19 @@ public class Release2Beta {
                 "." + ((i >> 16) & 0xFF) +
                 "." + ((i >> 8) & 0xFF) +
                 "." + (i & 0xFF);
+
+    }
+
+    private static String longToIpv6(long msb) {
+        ByteBuffer byteBuffer = ByteBuffer.allocate(16);
+        byteBuffer.putLong(msb);
+        byteBuffer.putLong(0);
+
+        try {
+            return InetAddress.getByAddress(byteBuffer.array()).getHostAddress();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 }
