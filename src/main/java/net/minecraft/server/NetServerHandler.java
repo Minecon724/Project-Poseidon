@@ -811,7 +811,6 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
                 }
 
                 s = String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage());
-                minecraftServer.console.sendMessage(s);
                 for (Player recipient : event.getRecipients()) {
                     recipient.sendMessage(s);
                 }
@@ -836,20 +835,7 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
         s = event.getMessage(); //Poseidon: Override command with new command string.
 
         try {
-            if (this.server.dispatchCommand(player, s.substring(1))) {
-                //Project Poseidon Start
-                //Hide commands from being logged in console
-                String cmdName = s.split(" ")[0].replaceAll("/", "");
-
-                if (Poseidon.getServer().isCommandHidden(cmdName)) {
-                    a.info(player.getName() + " issued server command: COMMAND REDACTED");
-                } else {
-                    a.info(player.getName() + " issued server command: " + s);
-                }
-
-                //Project Poseidon End
-                return;
-            }
+            this.server.dispatchCommand(player, s.substring(1));
         } catch (CommandException ex) {
             player.sendMessage(ChatColor.RED + "An internal error occurred while attempting to perform this command");
             Logger.getLogger(NetServerHandler.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
