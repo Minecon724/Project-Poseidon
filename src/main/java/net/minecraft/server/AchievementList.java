@@ -30,8 +30,4 @@ public class AchievementList {
     public AchievementList() {}
 
     public static void a() {}
-
-    static {
-        System.out.println(e.size() + " achievements");
-    }
 }

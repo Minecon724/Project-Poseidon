@@ -269,7 +269,6 @@ public class PoseidonConfig extends Configuration {
                         i = i + 1;
                     }
                 }
-                System.out.println("Leaf blocks can't replace the following block IDs: " + Arrays.toString(treeBlacklistIDs));
             }
         } else {
             treeBlacklistIDs = new Integer[0];

@@ -80,7 +80,6 @@ public class CraftingManager {
         this.registerShapedRecipe(new ItemStack(Block.PISTON_STICKY, 1), new Object[] { "S", "P", Character.valueOf('S'), Item.SLIME_BALL, Character.valueOf('P'), Block.PISTON});
         this.registerShapedRecipe(new ItemStack(Item.BED, 1), new Object[] { "###", "XXX", Character.valueOf('#'), Block.WOOL, Character.valueOf('X'), Block.WOOD});
         Collections.sort(this.b, new RecipeSorter(this));
-        System.out.println(this.b.size() + " recipes");
     }
 
     public void registerShapedRecipe(ItemStack itemstack, Object... aobject) { // CraftBukkit - default -> public
