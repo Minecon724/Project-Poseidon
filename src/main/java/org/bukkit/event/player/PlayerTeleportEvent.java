@@ -26,7 +26,7 @@ public class PlayerTeleportEvent extends PlayerMoveEvent {
             EntityPlayer entity = ((CraftPlayer) this.getPlayer()).getHandle();
             if (entity.activeContainer == entity.defaultContainer)
                 return;
-            System.out.println("[Poseidon] Force closing " + player.getName() + "'s inventory as they have teleported to a different world. This is to prevent a dupe bug.");
+            System.out.print("[Poseidon] Force closing " + player.getName() + "'s inventory as they have teleported to a different world. This is to prevent a dupe bug.");
             entity.y();
         }
     }

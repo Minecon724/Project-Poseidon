@@ -57,7 +57,7 @@ public class NetworkManager {
         this.threshold = PoseidonConfig.getInstance().getInt("settings.packet-spam-detection.threshold", 1000);
 
         //Debug for packet spam detection
-//        System.out.println("[Poseidon] Packet spam detection is " + (this.spamDetection ? "enabled" : "disabled") + " with a threshold of " + this.threshold + " packets");
+//        System.out.print("[Poseidon] Packet spam detection is " + (this.spamDetection ? "enabled" : "disabled") + " with a threshold of " + this.threshold + " packets");
 
         // CraftBukkit start - IPv6 stack in Java on BSD/OSX doesn't support setTrafficClass
         try {
@@ -262,7 +262,7 @@ public class NetworkManager {
                 } else {
                     this.a("disconnect.spam", new Object[0]);
                 }
-                System.out.println("[Poseidon] Player " + playerUsername + " has been kicked for packet spamming. The queue size was " + this.m.size() + " and the threshold was " + threshold + ".");
+                System.out.print("[Poseidon] Player " + playerUsername + " has been kicked for packet spamming. The queue size was " + this.m.size() + " and the threshold was " + threshold + ".");
             }
         }
 

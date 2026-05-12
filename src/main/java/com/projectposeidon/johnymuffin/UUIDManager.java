@@ -26,7 +26,7 @@ public class UUIDManager {
     private UUIDManager() {
         if (!cacheFile.exists()) {
             try (FileWriter writer = new FileWriter(cacheFile)) {
-                System.out.println("[Poseidon] Generating uuidcache.json for Project Poseidon");
+                System.out.print("[Poseidon] Generating uuidcache.json for Project Poseidon");
                 uuidCacheList = new ArrayList<>();
                 gson.toJson(uuidCacheList, writer);
             } catch (IOException e) {
@@ -35,12 +35,12 @@ public class UUIDManager {
         }
 
         try (FileReader reader = new FileReader(cacheFile)) {
-            System.out.println("[Poseidon] Reading uuidcache.json for Project Poseidon");
+            System.out.print("[Poseidon] Reading uuidcache.json for Project Poseidon");
             Type listType = new TypeToken<List<UUIDEntry>>() {}.getType();
             uuidCacheList = gson.fromJson(reader, listType);
             if (uuidCacheList == null) uuidCacheList = new ArrayList<>();
         } catch (Exception e) {
-            System.out.println("[Poseidon] UUID cache corrupt or unreadable, resetting: " + e);
+            System.out.print("[Poseidon] UUID cache corrupt or unreadable, resetting: " + e);
             uuidCacheList = new ArrayList<>();
             saveJsonArray();
         }

@@ -98,7 +98,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         try {
             getHandle().netServerHandler.sendPacket(new Packet3Chat(message));
         } catch (NullPointerException exception) {
-            System.out.println("[Poseidon] Exception thrown when attempting to send packet to " + getName() + ". Does this player exist, or are they a phantom?????");
+            System.out.print("[Poseidon] Exception thrown when attempting to send packet to " + getName() + ". Does this player exist, or are they a phantom?????");
             exception.printStackTrace();
         }
     }

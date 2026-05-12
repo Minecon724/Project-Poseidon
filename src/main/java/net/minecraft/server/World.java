@@ -188,7 +188,7 @@ public class World implements IBlockAccess {
                 i = 0;
                 j = 0;
 
-                System.out.println("[Poseidon] The generator for the world \"" + this.worldData.name + "\" did not generate a safe spawn location in 1024 attempts. If this world's generator is handled by a plugin, please inform them that they can solve this problem by overriding the \"canSpawn\" method with code more suited to their world type, or to define a fixed spawn location.");
+                System.out.print("[Poseidon] The generator for the world \"" + this.worldData.name + "\" did not generate a safe spawn location in 1024 attempts. If this world's generator is handled by a plugin, please inform them that they can solve this problem by overriding the \"canSpawn\" method with code more suited to their world type, or to define a fixed spawn location.");
 
                 break;
             }

@@ -55,13 +55,13 @@ public class LoginProcessHandler {
             int currentRunningTime = (int) (System.currentTimeMillis() / 1000L - connectionStartTime);
             if (!loginSuccessful && !loginCancelled) {
                 //This if statement shouldn't be needed, but this is here just in case a players login fails but the appropriate variables aren't changed
-                System.out.println("[Poseidon] The login process for " + packet1Login.name + " is still running. It has been running for " + currentRunningTime + " seconds. The following plugins are still currently pausing the login process: " + getConnectionPauseNames(true));
+                System.out.print("[Poseidon] The login process for " + packet1Login.name + " is still running. It has been running for " + currentRunningTime + " seconds. The following plugins are still currently pausing the login process: " + getConnectionPauseNames(true));
 
                 //Cancel the login process if it has been running for more than 20 seconds.
                 if (currentRunningTime >= 20) {
                     cancelLoginProcess("Login Process Handler Timeout");
-                    System.out.println("[Poseidon] LoginProcessHandler for user " + packet1Login.name + " has failed to respond after 20 seconds. And future calls to this class will result in error");
-                    System.out.println("[Poseidon] Plugin Pauses: " + getConnectionPauseNames(true));
+                    System.out.print("[Poseidon] LoginProcessHandler for user " + packet1Login.name + " has failed to respond after 20 seconds. And future calls to this class will result in error");
+                    System.out.print("[Poseidon] Plugin Pauses: " + getConnectionPauseNames(true));
                 }
 
                 if (currentRunningTime < 60) {
@@ -95,7 +95,7 @@ public class LoginProcessHandler {
             boolean useGetMethod = PoseidonConfig.getInstance().getString("settings.uuid-fetcher.method.value", "POST").equalsIgnoreCase("GET");
             (new ThreadUUIDFetcher(packet1Login, this, useGetMethod)).start();
         } else {
-            System.out.println("[Poseidon] Fetched UUID from Cache for " + packet1Login.name + " - " + uuid.toString());
+            System.out.print("[Poseidon] Fetched UUID from Cache for " + packet1Login.name + " - " + uuid.toString());
             connectPlayer(uuid);
         }
 
@@ -143,7 +143,7 @@ public class LoginProcessHandler {
 
         if(prefixDot) {
             if (!username.startsWith(".")) {
-                System.out.println("[Poseidon] Adding . prefix to cracked user " + username + "'s username");
+                System.out.print("[Poseidon] Adding . prefix to cracked user " + username + "'s username");
                 username = "." + username;
             }
 
@@ -222,7 +222,7 @@ public class LoginProcessHandler {
         for (Player p : server.getOnlinePlayers()) {
             if (p.getName().equalsIgnoreCase(username) || p.getUniqueId().equals(uuid)) {
                 cancelLoginProcess(this.msgKickAlreadyOnline);
-                System.out.println("[Poseidon] User " + username + " has been blocked from connecting as they share a username or UUID with a user who is already online called " + p.getName() +
+                System.out.print("[Poseidon] User " + username + " has been blocked from connecting as they share a username or UUID with a user who is already online called " + p.getName() +
                         "\nMost likely the user has changed their UUID or the server is running in offline mode and someone has attempted to connect with their name");
             }
         }
@@ -289,7 +289,7 @@ public class LoginProcessHandler {
     public void removeConnectionInterrupt(ConnectionPause connectionPause) {
         //Check if the connection pause is registered and active
         if (!connectionPauses.contains(connectionPause)) {
-            System.out.println("[Poseidon] A plugin has tried to remove a connection pause from the player " + packet1Login.name + " called " + connectionPause.getConnectionPauseName() +
+            System.out.print("[Poseidon] A plugin has tried to remove a connection pause from the player " + packet1Login.name + " called " + connectionPause.getConnectionPauseName() +
                     " from the plugin " + connectionPause.getPluginName() + ". Please contact the plugin author and get them to check their logic as this is a duplicate remove, or a pause for another player.");
             return;
         }
@@ -302,12 +302,12 @@ public class LoginProcessHandler {
 
             //If a pause has cancelled the login, don't connect the player
             if (loginCancelled) {
-                System.out.println("[Poseidon] Player " + loginProcessHandler.packet1Login.name + " was not allowed to join after being on hold for " + timeTaken + " seconds by the following plugins: " + getConnectionPauseNames(false));
+                System.out.print("[Poseidon] Player " + loginProcessHandler.packet1Login.name + " was not allowed to join after being on hold for " + timeTaken + " seconds by the following plugins: " + getConnectionPauseNames(false));
                 return;
             }
 
             this.setLoginSuccessful(true);
-            System.out.println("[Poseidon] Player " + loginProcessHandler.packet1Login.name + " has been allowed to join after being on hold for " + timeTaken + " seconds by the following plugins: " + getConnectionPauseNames(false));
+            System.out.print("[Poseidon] Player " + loginProcessHandler.packet1Login.name + " has been allowed to join after being on hold for " + timeTaken + " seconds by the following plugins: " + getConnectionPauseNames(false));
             NetLoginHandler.a(netLoginHandler, packet1Login);
         }
     }
@@ -351,7 +351,7 @@ public class LoginProcessHandler {
      */
     @Deprecated
     public void addConnectionPause(Plugin plugin) throws Exception {
-        System.out.println("[Poseidon] " + plugin.getDescription().getName() + " is using the deprecated connection pause system which will be removed in the future. Contact the plugin author to get an updated version.");
+        System.out.print("[Poseidon] " + plugin.getDescription().getName() + " is using the deprecated connection pause system which will be removed in the future. Contact the plugin author to get an updated version.");
         legacyConnectionPause = addConnectionInterrupt(plugin, "Legacy-Connection-Pause");
     }
 
@@ -364,7 +364,7 @@ public class LoginProcessHandler {
             removeConnectionInterrupt(legacyConnectionPause);
             return;
         }
-        System.out.println("[Poseidon] " + plugin.getDescription().getName() + " Attempted to remove a legacy (deprecated) connection pause that was never added. Please contact the plugin author and get them to check their logic and update to the new connection pause system.");
+        System.out.print("[Poseidon] " + plugin.getDescription().getName() + " Attempted to remove a legacy (deprecated) connection pause that was never added. Please contact the plugin author and get them to check their logic and update to the new connection pause system.");
     }
 
     /**

@@ -35,17 +35,17 @@ public class WatchDogThread extends Thread {
                 } else {
                     //Server timout check
                     if ((lastTick + killTimeout) < (System.currentTimeMillis() / 1000L)) {
-                        System.out.println("[Poseidon-Watchdog] Server has hanged. Killing the process as a result of the watchdog timeout being exceeded.");
+                        System.out.print("[Poseidon-Watchdog] Server has hanged. Killing the process as a result of the watchdog timeout being exceeded.");
                         System.out.println("--------------------[Stacktrace For Developers]--------------------");
                         Arrays.asList(serverThread.getStackTrace()).forEach(System.out::println);
                         System.out.println("-------------------------------------------------------------------");
                         Runtime.getRuntime().halt(0);
 
                     } else {
-                        System.out.println("[Poseidon-Watchdog] A server tick hasn't occurred in " + ((int) ((System.currentTimeMillis() / 1000L) - lastTick)) + " seconds.");
+                        System.out.print("[Poseidon-Watchdog] A server tick hasn't occurred in " + ((int) ((System.currentTimeMillis() / 1000L) - lastTick)) + " seconds.");
                         //Server debug timeout
                         if((lastTick + debugTimeout) < (System.currentTimeMillis() / 1000L) && debugTimeoutEnabled && !printedDebug) {
-                            System.out.println("[Poseidon-Watchdog] Server hang detected. Printing debug as debug timeout has been exceeded.");
+                            System.out.print("[Poseidon-Watchdog] Server hang detected. Printing debug as debug timeout has been exceeded.");
                             System.out.println("--------------------[Stacktrace For Developers]--------------------");
                             Arrays.asList(serverThread.getStackTrace()).forEach(System.out::println);
                             System.out.println("-------------------------------------------------------------------");
@@ -55,7 +55,7 @@ public class WatchDogThread extends Thread {
                 }
                 Thread.sleep(3000L);
             } catch (InterruptedException e) {
-                System.out.println("[Poseidon-Watchdog] The watchdog has been interrupted.");
+                System.out.print("[Poseidon-Watchdog] The watchdog has been interrupted.");
 //                e.printStackTrace();
                 running = false;
             }

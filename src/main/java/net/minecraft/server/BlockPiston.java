@@ -68,7 +68,7 @@ public class BlockPiston extends Block {
                 try {
                     length = h(world, i, j, k, i1);
                 } catch (RuntimeException exception) {
-                    System.out.println("[Poseidon] A piston crash attempt occurred at " + i + " " + j + " " + k + " in " + world.getWorld().getName());
+                    System.out.print("[Poseidon] A piston crash attempt occurred at " + i + " " + j + " " + k + " in " + world.getWorld().getName());
                     return;
                 }
                 if (length >= 0) {

@@ -43,7 +43,7 @@ public class PoseidonConfig extends Configuration {
     private void validation() {
         //Confirm settings.uuid-fetcher.method.value is either POST or GET
         if (!this.getConfigString("settings.uuid-fetcher.method.value").equalsIgnoreCase("POST") && !this.getConfigString("settings.uuid-fetcher.method.value").equalsIgnoreCase("GET")) {
-            System.out.println("[Poseidon] Config: settings.uuid-fetcher.method.value is not POST or GET. Changing to POST.");
+            System.out.print("[Poseidon] Config: settings.uuid-fetcher.method.value is not POST or GET. Changing to POST.");
             this.setProperty("settings.uuid-fetcher.method.value", "POST");
         }
 
@@ -51,7 +51,7 @@ public class PoseidonConfig extends Configuration {
             try {
                 allowedProxyAddress = InetAddress.getByName(this.getConfigString("settings.release2beta.proxy-ip"));
             } catch (UnknownHostException e) {
-                System.out.println("[Poseidon] Config: settings.release2beta.proxy-ip is invalid, falling back to 127.0.0.1");
+                System.out.print("[Poseidon] Config: settings.release2beta.proxy-ip is invalid, falling back to 127.0.0.1");
                 this.setProperty("settings.release2beta.proxy-ip", "127.0.0.1");
             }
         }
@@ -59,7 +59,7 @@ public class PoseidonConfig extends Configuration {
 
     private void write() {
         if (this.getString("config-version") == null || Integer.valueOf(this.getString("config-version")) < configVersion) {
-            System.out.println("[Poseidon] Converting from config version " + (this.getString("config-version") == null ? "0" : this.getString("config-version")) + " to " + configVersion);
+            System.out.print("[Poseidon] Converting from config version " + (this.getString("config-version") == null ? "0" : this.getString("config-version")) + " to " + configVersion);
             convertToNewConfig();
             this.setProperty("config-version", configVersion);
         }
@@ -323,8 +323,8 @@ public class PoseidonConfig extends Configuration {
     public Boolean getConfigBoolean(String key, Boolean defaultValue) {
         Boolean value = getConfigBoolean(key);
         if (value == null) {
-            System.out.println("[Poseidon] Config: " + key + " does not exist. Using default value: " + defaultValue);
-            System.out.println("[Poseidon] Config: This is likely the result of an error. Please report this to the developer.");
+            System.out.print("[Poseidon] Config: " + key + " does not exist. Using default value: " + defaultValue);
+            System.out.print("[Poseidon] Config: This is likely the result of an error. Please report this to the developer.");
             value = defaultValue;
         }
         return value;
@@ -349,7 +349,7 @@ public class PoseidonConfig extends Configuration {
         // 4-5 Conversion
         convertToNewAddress("settings.uuid-fetcher.post.value", "settings.fetch-uuids-from");
         if (this.getString("settings.uuid-fetcher.post.value", "https://api.minecraftservices.com/minecraft/profile/lookup/bulk/byname").equals("https://api.mojang.com/profiles/minecraft")) {
-            System.out.println("[Poseidon] Config: settings.fetch-uuids-from is set to the default value (" + this.getString("settings.uuid-fetcher.post.value") + "). Changing to the new default value (https://api.minecraftservices.com/minecraft/profile/lookup/bulk/byname)");
+            System.out.print("[Poseidon] Config: settings.fetch-uuids-from is set to the default value (" + this.getString("settings.uuid-fetcher.post.value") + "). Changing to the new default value (https://api.minecraftservices.com/minecraft/profile/lookup/bulk/byname)");
             this.setProperty("settings.uuid-fetcher.post.value", "https://api.minecraftservices.com/minecraft/profile/lookup/bulk/byname");
         }
 
@@ -372,7 +372,7 @@ public class PoseidonConfig extends Configuration {
         boolean removed = false;
         for (String key : keys) {
             if (this.getString(key) != null) {
-                System.out.println("[Poseidon] Config: " + key + " is deprecated. Removing.");
+                System.out.print("[Poseidon] Config: " + key + " is deprecated. Removing.");
                 this.removeProperty(key);
                 removed = true;
             }
@@ -385,10 +385,10 @@ public class PoseidonConfig extends Configuration {
             return false;
         }
         if (this.getString(oldKey) == null) {
-            System.out.println("[Poseidon] Config: " + oldKey + " does not exist. Skipping conversion.");
+            System.out.print("[Poseidon] Config: " + oldKey + " does not exist. Skipping conversion.");
             return false;
         }
-        System.out.println("[Poseidon] Converting Config: " + oldKey + " to " + newKey);
+        System.out.print("[Poseidon] Converting Config: " + oldKey + " to " + newKey);
         Object value = this.getProperty(oldKey);
         this.setProperty(newKey, value);
         this.removeProperty(oldKey);
@@ -410,7 +410,7 @@ public class PoseidonConfig extends Configuration {
                 allowedProxyAddress = InetAddress.getByName(this.getConfigString("settings.release2beta.proxy-ip"));
             } catch (UnknownHostException e) {
                 // validation should have prevented this
-                System.out.println("[Poseidon] Config: settings.release2beta.proxy-ip is invalid, falling back to 127.0.0.1");
+                System.out.print("[Poseidon] Config: settings.release2beta.proxy-ip is invalid, falling back to 127.0.0.1");
                 allowedProxyAddress = InetAddress.getLoopbackAddress();
             }
         }
