@@ -521,7 +521,6 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
             // CraftBukkit end
             this.player.F();
         } else {
-            boolean flag = worldserver.weirdIsOpCache = worldserver.dimension != 0 || this.minecraftServer.serverConfigurationManager.isOp(this.player.name); // CraftBukkit
             boolean flag1 = false;
 
             if (packet14blockdig.e == 0) {
@@ -547,22 +546,9 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
                 }
             }
 
-            ChunkCoordinates chunkcoordinates = worldserver.getSpawn();
-            int l = (int) MathHelper.abs((float) (i - chunkcoordinates.x));
-            int i1 = (int) MathHelper.abs((float) (k - chunkcoordinates.z));
-
-            if (l > i1) {
-                i1 = l;
-            }
-
             if (packet14blockdig.e == 0) {
-                // CraftBukkit
-                if (i1 < this.server.getSpawnRadius() && !flag) {
-                    this.player.netServerHandler.sendPacket(new Packet53BlockChange(i, j, k, worldserver));
-                } else {
-                    // CraftBukkit - add face argument
-                    this.player.itemInWorldManager.dig(i, j, k, packet14blockdig.face);
-                }
+                // CraftBukkit - add face argument
+                this.player.itemInWorldManager.dig(i, j, k, packet14blockdig.face);
             } else if (packet14blockdig.e == 2) {
                 this.player.itemInWorldManager.a(i, j, k);
                 if (worldserver.getTypeId(i, j, k) != 0) {
@@ -645,25 +631,15 @@ public class NetServerHandler extends NetHandler implements ICommandListener {
             int j = packet15place.b;
             int k = packet15place.c;
             int l = packet15place.face;
-            ChunkCoordinates chunkcoordinates = worldserver.getSpawn();
-            int i1 = (int) MathHelper.abs((float) (i - chunkcoordinates.x));
-            int j1 = (int) MathHelper.abs((float) (k - chunkcoordinates.z));
-
-            if (i1 > j1) {
-                j1 = i1;
-            }
 
             // CraftBukkit start - Check if we can actually do something over this large a distance
             Location eyeLoc = this.getPlayer().getEyeLocation();
             if (Math.pow(eyeLoc.getX() - i, 2) + Math.pow(eyeLoc.getY() - j, 2) + Math.pow(eyeLoc.getZ() - k, 2) > PLACE_DISTANCE_SQUARED) {
                 return;
             }
-            flag = true; // spawn protection moved to ItemBlock!!!
             // CraftBukkit end
 
-            if (j1 > 16 || flag) {
-                this.player.itemInWorldManager.interact(this.player, worldserver, itemstack, i, j, k, l);
-            }
+            this.player.itemInWorldManager.interact(this.player, worldserver, itemstack, i, j, k, l);
 
             this.player.netServerHandler.sendPacket(new Packet53BlockChange(i, j, k, worldserver));
             if (l == 0) {

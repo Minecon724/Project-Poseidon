@@ -41,14 +41,7 @@ public class ChunkProviderServer implements IChunkProvider {
     }
 
     public void queueUnload(int i, int j) {
-        ChunkCoordinates chunkcoordinates = this.world.getSpawn();
-        int k = i * 16 + 8 - chunkcoordinates.x;
-        int l = j * 16 + 8 - chunkcoordinates.z;
-        short short1 = 128;
-
-        if (k < -short1 || k > short1 || l < -short1 || l > short1 || !(this.world.keepSpawnInMemory)) { // CraftBukkit - added 'this.world.keepSpawnInMemory'
-            this.unloadQueue.add(i, j); // CraftBukkit
-        }
+        this.unloadQueue.add(i, j); // CraftBukkit
     }
 
     public Chunk getChunkAt(int i, int j) {

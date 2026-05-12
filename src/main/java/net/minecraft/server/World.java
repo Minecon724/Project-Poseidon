@@ -77,7 +77,7 @@ public class World implements IBlockAccess {
     // CraftBukkit start
     private final CraftWorld world;
     public boolean pvpMode;
-    public boolean keepSpawnInMemory = true;
+    public boolean keepSpawnInMemory = false;
     public ChunkGenerator generator;
     Chunk lastChunkAccessed;
     int lastXAccessed = Integer.MIN_VALUE;
@@ -2303,7 +2303,10 @@ public class World implements IBlockAccess {
     }
 
     public ChunkCoordinates getSpawn() {
-        return new ChunkCoordinates(this.worldData.c(), this.worldData.d(), this.worldData.e());
+        int radius = getServer().getSpawnRadius();
+        int x = random.nextInt(-radius, radius);
+        int z = random.nextInt(-radius, radius);
+        return new ChunkCoordinates(x, 64, z);
     }
 
     public boolean a(EntityHuman entityhuman, int i, int j, int k) {

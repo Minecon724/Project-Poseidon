@@ -46,7 +46,6 @@ public final class SpawnerCreature {
         }
 
         int spawnedTotal = 0;
-        ChunkCoordinates worldSpawn = world.getSpawn();
         EnumCreatureType[] creatureTypes = EnumCreatureType.values();
 
         for (EnumCreatureType type : creatureTypes) {
@@ -117,36 +116,28 @@ public final class SpawnerCreature {
 
                                 // Keep spawns away from other players (24 block radius)
                                 if (world.a(fx, fy, fz, 24.0D) == null) {
-                                    float dx = fx - worldSpawn.x;
-                                    float dy = fy - worldSpawn.y;
-                                    float dz = fz - worldSpawn.z;
-                                    float dist2 = dx * dx + dy * dy + dz * dz;
+                                    EntityLiving mob;
 
-                                    // Don’t spawn too close to world spawn (>= 24 blocks -> 24^2 = 576)
-                                    if (dist2 >= 576.0F) {
-                                        EntityLiving mob;
+                                    try {
+                                        mob = (EntityLiving) chosen.a.getConstructor(World.class).newInstance(world);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                        return spawnedTotal;
+                                    }
 
-                                        try {
-                                            mob = (EntityLiving) chosen.a.getConstructor(World.class).newInstance(world);
-                                        } catch (Exception ex) {
-                                            ex.printStackTrace();
-                                            return spawnedTotal;
-                                        }
+                                    mob.setPositionRotation(fx, fy, fz, world.random.nextFloat() * 360.0F, 0.0F);
 
-                                        mob.setPositionRotation(fx, fy, fz, world.random.nextFloat() * 360.0F, 0.0F);
+                                    // d() = canSpawn() check
+                                    if (mob.d()) {
+                                        ++groupSpawned;
+                                        world.addEntity(mob, SpawnReason.NATURAL);
+                                        applyPostSpawnExtras(mob, world, fx, fy, fz);
 
-                                        // d() = canSpawn() check
-                                        if (mob.d()) {
-                                            ++groupSpawned;
-                                            world.addEntity(mob, SpawnReason.NATURAL);
-                                            applyPostSpawnExtras(mob, world, fx, fy, fz);
-
-                                            // l() = getMaxGroup() clamp for this entity
-                                            if (groupSpawned >= mob.l()) {
-                                                // Move to next chunk if we filled a group here
-                                                spawnedTotal += groupSpawned;
-                                                continue chunksLoop;
-                                            }
+                                        // l() = getMaxGroup() clamp for this entity
+                                        if (groupSpawned >= mob.l()) {
+                                            // Move to next chunk if we filled a group here
+                                            spawnedTotal += groupSpawned;
+                                            continue chunksLoop;
                                         }
                                     }
                                 }

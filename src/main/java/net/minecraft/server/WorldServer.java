@@ -88,15 +88,7 @@ public class WorldServer extends World implements BlockChangeDelegate {
     }
 
     public boolean a(EntityHuman entityhuman, int i, int j, int k) {
-        int l = (int) MathHelper.abs((float) (i - this.worldData.c()));
-        int i1 = (int) MathHelper.abs((float) (k - this.worldData.e()));
-
-        if (l > i1) {
-            i1 = l;
-        }
-
-        // CraftBukkit - Configurable spawn protection
-        return i1 > this.getServer().getSpawnRadius() || this.server.serverConfigurationManager.isOp(entityhuman.name);
+        return true;
     }
 
     protected void c(Entity entity) {
