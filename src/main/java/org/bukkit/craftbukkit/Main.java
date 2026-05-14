@@ -97,6 +97,8 @@ public class Main {
 
                 acceptsAll(asList("nojline"), "Disables jline and emulates the vanilla console");
 
+                acceptsAll(asList("noinput"), "Disables input handling completely");
+
                 acceptsAll(asList("nogui"), "Some modern panels like to pass this thru. Just ignore it");
 
                 acceptsAll(asList("v", "version"), "Show the CraftBukkit Version");

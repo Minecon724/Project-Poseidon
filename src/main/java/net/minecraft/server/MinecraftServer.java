@@ -90,10 +90,13 @@ public class MinecraftServer implements Runnable, ICommandListener {
 
     private boolean init() throws UnknownHostException { // CraftBukkit - added throws UnknownHostException
         this.consoleCommandHandler = new ConsoleCommandHandler(this);
-        ThreadCommandReader threadcommandreader = new ThreadCommandReader(this);
 
-        threadcommandreader.setDaemon(true);
-        threadcommandreader.start();
+        if (!options.has("noinput")) {
+            ThreadCommandReader threadcommandreader = new ThreadCommandReader(this);
+            threadcommandreader.setDaemon(true);
+            threadcommandreader.start();
+        }
+
         ConsoleLogManager.init(this); // CraftBukkit
 
         // CraftBukkit start
