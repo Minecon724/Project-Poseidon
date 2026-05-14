@@ -33,6 +33,15 @@ public class PlayerConnectionInitializationEvent extends Event {
     }
 
     /**
+     * Sets the player's name
+     *
+     * @param username New player name
+     */
+    public void setName(String username) {
+        this.username = username;
+    }
+
+    /**
      * Gets the player IP address.
      *
      * @return

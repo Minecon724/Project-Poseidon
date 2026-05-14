@@ -78,6 +78,8 @@ public class LoginProcessHandler {
             return;
         }
 
+        packet1Login.name = event.getName();
+
         if (onlineMode) {
             //Server is running online mode
             verifyMojangSession();
