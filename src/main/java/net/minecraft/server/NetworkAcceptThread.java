@@ -1,11 +1,14 @@
 package net.minecraft.server;
 
+import com.legacyminecraft.poseidon.PoseidonConfig;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.HashMap;
 
 class NetworkAcceptThread extends Thread {
+    private final int throttleDelay = PoseidonConfig.getInstance().getInt("settings.connection-throttle", 5000);
 
     final MinecraftServer a;
 
@@ -18,7 +21,7 @@ class NetworkAcceptThread extends Thread {
     }
 
     public void run() {
-        HashMap hashmap = new HashMap();
+        HashMap<InetAddress, Long> hashmap = new HashMap<>();
 
         while (this.b.b) {
             try {
@@ -26,12 +29,13 @@ class NetworkAcceptThread extends Thread {
 
                 if (socket != null) {
                     InetAddress inetaddress = socket.getInetAddress();
+                    long now = System.currentTimeMillis();
+                    long lastConnection = hashmap.getOrDefault(inetaddress, 0L);
 
-                    if (hashmap.containsKey(inetaddress) && !"127.0.0.1".equals(inetaddress.getHostAddress()) && System.currentTimeMillis() - ((Long) hashmap.get(inetaddress)).longValue() < 5000L) {
-                        hashmap.put(inetaddress, Long.valueOf(System.currentTimeMillis()));
+                    if (now - lastConnection < throttleDelay && !"127.0.0.1".equals(inetaddress.getHostAddress())) {
                         socket.close();
                     } else {
-                        hashmap.put(inetaddress, Long.valueOf(System.currentTimeMillis()));
+                        hashmap.put(inetaddress, now);
                         NetLoginHandler netloginhandler = new NetLoginHandler(this.a, socket, "Connection #" + NetworkListenThread.b(this.b));
 
                         NetworkListenThread.a(this.b, netloginhandler);
