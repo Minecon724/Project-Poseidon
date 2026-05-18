@@ -437,4 +437,29 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
             nsh.sendPacket(packet);
         }
     }
+
+    @Override
+    public int getViewDistance() {
+        return getHandle().viewDistance;
+    }
+
+    @Override
+    public void setViewDistance(int viewDistance) {
+        if (viewDistance < 3 || viewDistance > 15) {
+            throw new IllegalArgumentException("View distance must be between 3 and 15");
+        }
+
+        getHandle().viewDistance = viewDistance;
+    }
+
+    @Override
+    public void refreshChunkView() {
+        EntityPlayer entityplayer = getHandle();
+        int i = (int) entityplayer.locX >> 4;
+        int j = (int) entityplayer.locZ >> 4;
+        int k = (int) entityplayer.d >> 4;
+        int l = (int) entityplayer.e >> 4;
+
+        entityplayer.getWorldServer().getPlayerManager().refreshChunkView(i, j, k, l, entityplayer);
+    }
 }

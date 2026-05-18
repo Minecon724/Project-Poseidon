@@ -5,6 +5,7 @@ import net.minecraft.server.Packet;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.map.MapView;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.net.InetSocketAddress;
 import java.util.UUID;
@@ -349,5 +350,27 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
     public boolean canSee(Player player);
 
     public void sendPacket(final Player player, final Packet packet);
+
+    /**
+     * Returns the player's effective view distance
+     *
+     * @return the player's effective view distance
+     */
+    public int getViewDistance();
+
+    /**
+     * Sets the player's effective view distance
+     *
+     * @param viewDistance the player's effective view distance
+     * @see Player#refreshChunkView()
+     */
+    public void setViewDistance(int viewDistance);
+
+    /**
+     * Adds or removes the player from chunks as if it moved,
+     * for e.g. sending chunks after changing view distance
+     */
+    @ApiStatus.Experimental
+    public void refreshChunkView();
 
 }
