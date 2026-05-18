@@ -55,8 +55,7 @@ public class SimpleCommandMap implements CommandMap {
 
         //Poseidon Command Start
         register("poseidon", new PoseidonCommand("poseidon"));
-        if (PoseidonConfig.getInstance().getConfigBoolean("command.tps.enabled"))
-            register("poseidon", new TPSCommand("tps"));
+        register("poseidon", new TPSCommand("tps"));
         //Poseidon Command End
     }
 
@@ -75,6 +74,13 @@ public class SimpleCommandMap implements CommandMap {
      * {@inheritDoc}
      */
     public boolean register(String fallbackPrefix, Command command) {
+        if ("bukkit".equals(fallbackPrefix) || "poseidon".equals(fallbackPrefix)) {
+            List<String> disabledCommands = PoseidonConfig.getInstance().getStringList("command.disabled", List.of());
+            if (disabledCommands.contains(command.getName())) {
+                return false;
+            }
+        } // this whole thing is :|
+
         return register(command.getName(), fallbackPrefix, command);
     }
 

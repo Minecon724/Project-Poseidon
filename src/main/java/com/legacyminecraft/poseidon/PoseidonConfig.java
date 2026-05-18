@@ -6,6 +6,7 @@ import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -238,9 +239,8 @@ public class PoseidonConfig extends Configuration {
         generateConfigOption("message.update.available", "\u00A7dA newer version of Poseidon is available: %newversion%");
 
         //Optional Poseidon Commands
-        generateConfigOption("command.info", "This section allows you to enable or disable optional Poseidon commands. This is useful if you have a plugin that conflicts with a Poseidon command.");
-        generateConfigOption("command.tps.info", "Enables the /tps command to show the server's TPS for various intervals.");
-        generateConfigOption("command.tps.enabled", true);
+        generateConfigOption("command.info", "This section allows you to disable built-in commands. This is useful if you have a plugin that conflicts with a command.");
+        generateConfigOption("command.disabled", List.of("poseidon"));
 
         //UberBukkit
         generateConfigOption("fix.optimize-sponges.enabled", true);
