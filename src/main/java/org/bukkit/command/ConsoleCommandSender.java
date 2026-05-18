@@ -22,7 +22,7 @@ public class ConsoleCommandSender implements CommandSender {
     }
 
     public void sendMessage(String message) {
-        System.out.println(ChatColor.stripColor(message));
+        server.getLogger().info(ChatColor.stripColor(message));
     }
 
     public boolean isOp() {

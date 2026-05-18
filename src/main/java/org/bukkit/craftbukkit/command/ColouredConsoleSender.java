@@ -42,18 +42,12 @@ public class ColouredConsoleSender extends ConsoleCommandSender {
     @Override
     public void sendMessage(String message) {
         if (terminal.isANSISupported()) {
-            String result = message;
-
             for (ChatColor color : colors) {
-                if (replacements.containsKey(color)) {
-                    result = result.replaceAll(color.toString(), replacements.get(color));
-                } else {
-                    result = result.replaceAll(color.toString(), "");
-                }
+                message = message.replaceAll(color.toString(), replacements.getOrDefault(color, ""));
             }
-            System.out.println(result + ANSICodes.attrib(0));
-        } else {
-            super.sendMessage(message);
+            message = message + ANSICodes.attrib(0);
         }
+
+        super.sendMessage(message);
     }
 }
