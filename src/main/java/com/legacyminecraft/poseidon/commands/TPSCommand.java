@@ -1,6 +1,7 @@
 package com.legacyminecraft.poseidon.commands;
 
 import com.legacyminecraft.poseidon.Poseidon;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.VanillaCommand;
@@ -47,6 +48,11 @@ public class TPSCommand extends Command {
         }
 
         sender.sendMessage(message.toString());
+
+        long memoryFree = Runtime.getRuntime().freeMemory() / 1024 / 1024;
+        long memoryTotal = Runtime.getRuntime().totalMemory() / 1024 / 1024;
+        sender.sendMessage(ChatColor.GRAY + "Memory usage: " + formatMemory(memoryFree, memoryTotal) + " MiB" + ChatColor.GRAY + " / " + memoryTotal + " MiB");
+
         return true;
     }
 
@@ -71,5 +77,19 @@ public class TPSCommand extends Command {
             colorCode = "§c";
         }
         return colorCode + String.format("%.2f", tps);
+    }
+
+    private String formatMemory(long free, long total) {
+        long used = total - free;
+        double percentage = (double) used / total;
+        ChatColor colorCode;
+        if (percentage < 0.8) {
+            colorCode = ChatColor.GREEN;
+        } else if (percentage < 0.9) {
+            colorCode = ChatColor.YELLOW;
+        } else {
+            colorCode = ChatColor.RED;
+        }
+        return colorCode + String.valueOf(used);
     }
 }
