@@ -28,6 +28,7 @@ public class PluginCommandYamlParser {
                 Object aliases = entry.getValue().get("aliases");
                 Object permission = entry.getValue().get("permission");
                 Object isHidden = entry.getValue().get("hidden");
+                Object requirePlayer = entry.getValue().get("require-player");
 
                 if(isHidden != null) {
                     newCmd.setHidden(String.valueOf(isHidden).equalsIgnoreCase("true"));
@@ -57,6 +58,10 @@ public class PluginCommandYamlParser {
 
                 if (permission != null) {
                     newCmd.setPermission(permission.toString());
+                }
+
+                if (requirePlayer != null) {
+                    newCmd.setRequirePlayer(String.valueOf(isHidden).equalsIgnoreCase("true"));
                 }
 
                 pluginCmds.add(newCmd);

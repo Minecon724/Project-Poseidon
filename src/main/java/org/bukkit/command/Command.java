@@ -23,6 +23,7 @@ public abstract class Command {
     protected String usageMessage;
     private String permission;
     private boolean isHidden;
+    private boolean requirePlayer;
 
     protected Command(String name) {
         this(name, "", "/" + name, new ArrayList<String>());
@@ -265,5 +266,23 @@ public abstract class Command {
      */
     public void setHidden(boolean hidden) {
         isHidden = hidden;
+    }
+
+    /**
+     * Returns whether only players are allowed to use ths command
+     *
+     * @return whether only players are allowed to use ths command
+     */
+    public boolean isRequirePlayer() {
+        return requirePlayer;
+    }
+
+    /**
+     * Sets whether only players are allowed to use ths command
+     *
+     * @param requirePlayer whether only players are allowed to use ths command
+     */
+    public void setRequirePlayer(boolean requirePlayer) {
+        this.requirePlayer = requirePlayer;
     }
 }

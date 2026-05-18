@@ -3,11 +3,11 @@ package org.bukkit.command;
 //Poseidon start
 import com.legacyminecraft.poseidon.PoseidonConfig;
 import com.legacyminecraft.poseidon.commands.PoseidonCommand;
-import com.legacyminecraft.poseidon.commands.ResolveCommand;
 import com.legacyminecraft.poseidon.commands.TPSCommand;
 //Poseidon end
 import org.bukkit.Server;
 import org.bukkit.command.defaults.*;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -169,6 +169,11 @@ public class SimpleCommandMap implements CommandMap {
         }
         if (target == null) {
             return false;
+        }
+
+        if (target.isRequirePlayer() && !(sender instanceof Player)) {
+            sender.sendMessage("Only players can use this command");
+            return true;
         }
 
         try {
