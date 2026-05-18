@@ -1,32 +1,41 @@
 package com.legacyminecraft.poseidon.commands;
 
 import com.legacyminecraft.poseidon.Poseidon;
+import com.legacyminecraft.poseidon.PoseidonConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.defaults.VanillaCommand;
 
-import java.util.LinkedList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TPSCommand extends Command {
-
-    private final LinkedHashMap<String, Integer> intervals = new LinkedHashMap<>();
+    private static final Map<String, Integer> intervals;
 
     public TPSCommand(String name) {
         super(name);
         this.description = "Shows the server's TPS for various intervals";
         this.usageMessage = "/tps";
         this.setPermission("poseidon.command.tps");
+    }
 
-        // Define the intervals for TPS calculation
-        intervals.put("5s", 5);
-        intervals.put("30s", 30);
-        intervals.put("1m", 60);
-        intervals.put("5m", 300);
-        intervals.put("10m", 600);
-        intervals.put("15m", 900);
+    static {
+        intervals = Arrays.stream(PoseidonConfig.getInstance().getString("command.tps.intervals", "5s,1m,5m").split(","))
+                .map(String::trim)
+                .collect(Collectors.toMap(
+                        s -> s,
+                        s -> {
+                            int num = Integer.parseInt(s.substring(0, s.length() - 1));
+                            return switch (s.charAt(s.length() - 1)) {
+                                case 'h' -> num * 3600;
+                                case 'm' -> num * 60;
+                                case 's' -> num;
+                                default -> throw new IllegalArgumentException("Invalid interval: " + s);
+                            };
+                        },
+                        (a, _) -> a,
+                        LinkedHashMap::new
+                ));
     }
 
     @Override
@@ -34,18 +43,16 @@ public class TPSCommand extends Command {
         if (!testPermission(sender)) return true;
 
         LinkedList<Double> tpsRecords = Poseidon.getTpsRecords();
-        StringBuilder message = new StringBuilder("§bServer TPS: ");
+        StringBuilder message = new StringBuilder(ChatColor.GRAY + "Server TPS: ");
 
         // Calculate and format TPS for each interval dynamically
         for (Map.Entry<String, Integer> entry : intervals.entrySet()) {
             double averageTps = calculateAverage(tpsRecords, entry.getValue());
-            message.append(formatTps(averageTps)).append(" (").append(entry.getKey()).append("), ");
+            message.append(formatTps(averageTps)).append(ChatColor.GRAY).append(" (").append(entry.getKey()).append("), ");
         }
 
         // Remove the trailing comma and space
-        if (message.length() > 0) {
-            message.setLength(message.length() - 2);
-        }
+        message.setLength(message.length() - 2);
 
         sender.sendMessage(message.toString());
 
@@ -68,13 +75,13 @@ public class TPSCommand extends Command {
     }
 
     private String formatTps(double tps) {
-        String colorCode;
-        if (tps >= 19) {
-            colorCode = "§a";
+        ChatColor colorCode;
+        if (tps >= 18) {
+            colorCode = ChatColor.GREEN;
         } else if (tps >= 15) {
-            colorCode = "§e";
+            colorCode = ChatColor.YELLOW;
         } else {
-            colorCode = "§c";
+            colorCode = ChatColor.RED;
         }
         return colorCode + String.format("%.2f", tps);
     }

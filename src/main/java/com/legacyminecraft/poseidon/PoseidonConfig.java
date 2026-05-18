@@ -241,6 +241,7 @@ public class PoseidonConfig extends Configuration {
         //Optional Poseidon Commands
         generateConfigOption("command.info", "This section allows you to disable built-in commands. This is useful if you have a plugin that conflicts with a command.");
         generateConfigOption("command.disabled", List.of("poseidon"));
+        generateConfigOption("command.tps.intervals", "5s, 1m, 5m");
 
         //UberBukkit
         generateConfigOption("fix.optimize-sponges.enabled", true);
