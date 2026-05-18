@@ -235,6 +235,7 @@ public class PoseidonConfig extends Configuration {
         generateConfigOption("message.kick.full", "The server is full!");
         generateConfigOption("message.kick.shutdown", "\u00A7cServer is shutting down, please rejoin later.");
         generateConfigOption("message.kick.already-online", "\u00A7cA player with your username or uuid is already online, try reconnecting in a minute.");
+        generateConfigOption("message.kick.throttled", "\u00A7eConnection throttled! Please wait before reconnecting.");
         generateConfigOption("message.player.join", "\u00A7e%player% joined the game.");
         generateConfigOption("message.player.leave", "\u00A7e%player% left the game.");
         generateConfigOption("message.update.available", "\u00A7dA newer version of Poseidon is available: %newversion%");
