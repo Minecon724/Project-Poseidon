@@ -80,7 +80,7 @@ public class UUIDManager {
 
     public static UUID generateOfflineUUID(String username) {
         // TODO: Update to modern system: UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes(StandardCharsets.UTF_8));
-        return UUID.nameUUIDFromBytes(username.getBytes());
+        return UUID.nameUUIDFromBytes(username.toLowerCase().getBytes());
     }
 
     public UUID getUUIDGraceful(String username) {
