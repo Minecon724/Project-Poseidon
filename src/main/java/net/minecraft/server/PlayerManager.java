@@ -66,7 +66,7 @@ public class PlayerManager {
         entityplayer.d = entityplayer.locX;
         entityplayer.e = entityplayer.locZ;
         int k = 0;
-        int l = this.f;
+        int l = entityplayer.viewDistance;
         int i1 = 0;
         int j1 = 0;
 
@@ -100,9 +100,10 @@ public class PlayerManager {
     public void removePlayer(EntityPlayer entityplayer) {
         int i = (int) entityplayer.d >> 4;
         int j = (int) entityplayer.e >> 4;
+        int viewDistance = entityplayer.viewDistance;
 
-        for (int k = i - this.f; k <= i + this.f; ++k) {
-            for (int l = j - this.f; l <= j + this.f; ++l) {
+        for (int k = i - viewDistance; k <= i + viewDistance; ++k) {
+            for (int l = j - viewDistance; l <= j + viewDistance; ++l) {
                 PlayerInstance playerinstance = this.a(k, l, false);
 
                 if (playerinstance != null) {
@@ -114,11 +115,11 @@ public class PlayerManager {
         this.managedPlayers.remove(entityplayer);
     }
 
-    private boolean a(int i, int j, int k, int l) {
+    private boolean a(int i, int j, int k, int l, int radius) {
         int i1 = i - k;
         int j1 = j - l;
 
-        return i1 >= -this.f && i1 <= this.f ? j1 >= -this.f && j1 <= this.f : false;
+        return i1 >= -radius && i1 <= radius && j1 >= -radius && j1 <= radius;
     }
 
     public void movePlayer(EntityPlayer entityplayer) {
@@ -135,21 +136,7 @@ public class PlayerManager {
             int j1 = j - l;
 
             if (i1 != 0 || j1 != 0) {
-                for (int k1 = i - this.f; k1 <= i + this.f; ++k1) {
-                    for (int l1 = j - this.f; l1 <= j + this.f; ++l1) {
-                        if (!this.a(k1, l1, k, l)) {
-                            this.a(k1, l1, true).a(entityplayer);
-                        }
-
-                        if (!this.a(k1 - i1, l1 - j1, i, j)) {
-                            PlayerInstance playerinstance = this.a(k1 - i1, l1 - j1, false);
-
-                            if (playerinstance != null) {
-                                playerinstance.b(entityplayer);
-                            }
-                        }
-                    }
-                }
+                refreshChunkView(i, j, k, l, entityplayer);
 
                 entityplayer.d = entityplayer.locX;
                 entityplayer.e = entityplayer.locZ;
@@ -169,6 +156,30 @@ public class PlayerManager {
                 // CraftBukkit end
             }
         }
+    }
+
+    public void refreshChunkView(int i, int j, int k, int l, EntityPlayer entityplayer) {
+        int i1 = i - k;
+        int j1 = j - l;
+
+        int viewDistance = entityplayer.viewDistance;
+        for (int k1 = i - viewDistance; k1 <= i + viewDistance; ++k1) {
+            for (int l1 = j - viewDistance; l1 <= j + viewDistance; ++l1) {
+                if (!this.a(k1, l1, k, l, entityplayer.prevViewDistance)) {
+                    this.a(k1, l1, true).a(entityplayer);
+                }
+
+                if (!this.a(k1 - i1, l1 - j1, i, j, viewDistance)) {
+                    PlayerInstance playerinstance = this.a(k1 - i1, l1 - j1, false);
+
+                    if (playerinstance != null) {
+                        playerinstance.b(entityplayer);
+                    }
+                }
+            }
+        }
+
+        entityplayer.prevViewDistance = viewDistance;
     }
     
     // Poseidon

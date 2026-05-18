@@ -32,9 +32,7 @@ class PlayerInstance {
     }
 
     public void a(EntityPlayer entityplayer) {
-        if (this.b.contains(entityplayer)) {
-            throw new IllegalStateException("Failed to add player. " + entityplayer + " already is in chunk " + this.chunkX + ", " + this.chunkZ);
-        } else {
+        if (!this.b.contains(entityplayer)) {
             // CraftBukkit start
             if (entityplayer.playerChunkCoordIntPairs.add(this.location)) {
                 entityplayer.netServerHandler.sendPacket(new Packet50PreChunk(this.location.x, this.location.z, true));

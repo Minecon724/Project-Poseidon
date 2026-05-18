@@ -29,6 +29,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     private ItemStack[] bN = new ItemStack[]{null, null, null, null, null};
     private int bO = 0;
     public boolean h;
+    public int viewDistance;
+    public int prevViewDistance;
 
     public EntityPlayer(MinecraftServer minecraftserver, World world, String s, ItemInWorldManager iteminworldmanager) {
         super(world);
@@ -58,6 +60,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         // CraftBukkit start
         this.displayName = this.name;
         this.playerUUID = PoseidonUUID.getPlayerGracefulUUID(this.name); //Project Poseidon
+        this.viewDistance = PoseidonConfig.getInstance().getInt("view-distance", 10);
+        this.prevViewDistance = this.viewDistance;
     }
 
     public String displayName;
