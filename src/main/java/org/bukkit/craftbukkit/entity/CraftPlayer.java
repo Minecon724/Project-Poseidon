@@ -439,6 +439,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
+    public int getPing() {
+        return getHandle().netServerHandler.networkManager.latency;
+    }
+
+    @Override
     public int getViewDistance() {
         return getHandle().viewDistance;
     }

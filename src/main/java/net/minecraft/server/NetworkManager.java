@@ -41,10 +41,13 @@ public class NetworkManager {
     public int f = 0;
     private int lowPriorityQueueDelay = 50;
     private final boolean firePacketEvents;
-
     private final boolean spamDetection;
 
     private final int threshold;
+
+    private boolean monitorLatency = false;
+    private long lastLatencyProbe = -1;
+    public int latency = -1;
 
     public NetworkManager(Socket socket, String s, NetHandler nethandler) {
         this.socket = socket;
@@ -102,6 +105,7 @@ public class NetworkManager {
 
     public void a(NetHandler nethandler) {
         this.p = nethandler;
+        monitorLatency = true;
     }
 
     public void queue(Packet packet) {
@@ -128,11 +132,16 @@ public class NetworkManager {
             int i;
             int[] aint;
 
-            if (!this.highPriorityQueue.isEmpty() && (this.f == 0 || System.currentTimeMillis() - ((Packet) this.highPriorityQueue.get(0)).timestamp >= (long) this.f)) {
+            if (!this.highPriorityQueue.isEmpty()) {
                 object = this.g;
                 synchronized (this.g) {
                     packet = (Packet) this.highPriorityQueue.remove(0);
                     this.x -= packet.a() + 1;
+                }
+
+                if (monitorLatency && packet.timestamp - lastLatencyProbe > 20000) {
+                    lastLatencyProbe = System.currentTimeMillis();
+                    Packet.a(new Packet2Handshake("-"), this.output);
                 }
 
                 Packet.a(packet, this.output);
@@ -182,6 +191,11 @@ public class NetworkManager {
             if (packet != null) {
                 int[] aint = d;
                 int i = packet.b();
+
+                if (monitorLatency && i == 1) {
+                    this.latency = (int) (System.currentTimeMillis() - lastLatencyProbe);
+                    return true;
+                }
 
                 aint[i] += packet.a() + 1;
                 this.m.add(packet);

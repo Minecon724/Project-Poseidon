@@ -351,6 +351,8 @@ public interface Player extends HumanEntity, CommandSender, OfflinePlayer {
 
     public void sendPacket(final Player player, final Packet packet);
 
+    public int getPing();
+
     /**
      * Returns the player's effective view distance
      *
