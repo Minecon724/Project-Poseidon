@@ -7,7 +7,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
 public class RegionFile {
-
+    private static final CompressionType compressionType = CompressionType.NONE;
     private static final byte[] a = new byte[4096];
     private final File b;
     private RandomAccessFile c;
@@ -133,23 +133,18 @@ public class RegionFile {
                             return null;
                         } else {
                             byte b0 = this.c.readByte();
-                            byte[] abyte;
-                            DataInputStream datainputstream;
 
-                            if (b0 == 1) {
-                                abyte = new byte[j1 - 1];
-                                this.c.read(abyte);
-                                datainputstream = new DataInputStream(new GZIPInputStream(new ByteArrayInputStream(abyte)));
-                                return datainputstream;
-                            } else if (b0 == 2) {
-                                abyte = new byte[j1 - 1];
-                                this.c.read(abyte);
-                                datainputstream = new DataInputStream(new InflaterInputStream(new ByteArrayInputStream(abyte)));
-                                return datainputstream;
-                            } else {
-                                this.b("READ", i, j, "unknown version " + b0);
-                                return null;
-                            }
+                            byte[] abyte = new byte[j1 - 1];
+                            this.c.read(abyte);
+                            var byteArrayInputStream = new ByteArrayInputStream(abyte);
+
+                            var compressedInputStream = switch (CompressionType.ofByteValue(b0)) {
+                                case GZIP -> new GZIPInputStream(byteArrayInputStream);
+                                case DEFLATE -> new InflaterInputStream(byteArrayInputStream);
+                                case NONE -> byteArrayInputStream;
+                            };
+
+                            return new DataInputStream(compressedInputStream);
                         }
                     }
                 }
@@ -161,7 +156,13 @@ public class RegionFile {
     }
 
     public DataOutputStream b(int i, int j) {
-        return this.d(i, j) ? null : new DataOutputStream(new DeflaterOutputStream(new ChunkBuffer(this, i, j)));
+        var chunkBuffer = new ChunkBuffer(this, i, j);
+        var compressedOutputStream = switch (compressionType) {
+            case GZIP -> throw new UnsupportedOperationException("Cannot write GZIP files");
+            case DEFLATE -> new DeflaterOutputStream(chunkBuffer);
+            case NONE -> chunkBuffer;
+        };
+        return this.d(i, j) ? null : new DataOutputStream(compressedOutputStream);
     }
 
     protected synchronized void a(int i, int j, byte[] abyte, int k) {
@@ -244,7 +245,7 @@ public class RegionFile {
         this.b(" " + i);
         this.c.seek((long) (i * 4096));
         this.c.writeInt(j + 1);
-        this.c.writeByte(2);
+        this.c.writeByte(compressionType.byteValue);
         this.c.write(abyte, 0, j);
     }
 
@@ -274,5 +275,27 @@ public class RegionFile {
 
     public void b() throws IOException {
         this.c.close();
+    }
+
+    public enum CompressionType {
+        GZIP(1),
+        DEFLATE(2),
+        NONE(3);
+
+        public final int byteValue;
+
+        CompressionType(int byteValue) {
+            this.byteValue = byteValue;
+        }
+
+        public static CompressionType ofByteValue(byte byteValue) {
+            for (var type : CompressionType.values()) {
+                if (type.byteValue == byteValue) {
+                    return type;
+                }
+            }
+
+            throw new IllegalArgumentException("Unknown compression type: " + byteValue);
+        }
     }
 }
