@@ -551,10 +551,10 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
                 this.netServerHandler.sendPacket(new Packet200Statistic(statistic.e, i));
             }
-        }
 
-        var event = new PlayerStatisticEvent((Player) bukkitEntity, statistic, i);
-        this.world.getServer().getPluginManager().callEvent(event);
+            var event = new PlayerStatisticEvent((Player) bukkitEntity, statistic, i);
+            this.world.getServer().getPluginManager().callEvent(event);
+        }
     }
 
     public void B() {
