@@ -2,11 +2,13 @@ package net.minecraft.server;
 
 import com.legacyminecraft.poseidon.PoseidonConfig;
 import com.legacyminecraft.poseidon.event.PlayerDeathEvent;
+import com.legacyminecraft.poseidon.event.PlayerStatisticEvent;
 import com.projectposeidon.api.PoseidonUUID;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.ChunkCompressionThread;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.inventory.ChestOpenedEvent;
 
@@ -550,6 +552,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 this.netServerHandler.sendPacket(new Packet200Statistic(statistic.e, i));
             }
         }
+
+        var event = new PlayerStatisticEvent((Player) bukkitEntity, statistic, i);
+        this.world.getServer().getPluginManager().callEvent(event);
     }
 
     public void B() {

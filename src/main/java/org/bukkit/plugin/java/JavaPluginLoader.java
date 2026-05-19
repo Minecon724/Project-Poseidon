@@ -1,5 +1,6 @@
 package org.bukkit.plugin.java;
 
+import com.legacyminecraft.poseidon.event.PlayerStatisticEvent;
 import com.legacyminecraft.poseidon.event.PoseidonCustomListener;
 import org.bukkit.Server;
 import org.bukkit.event.CustomEventListener;
@@ -366,7 +367,7 @@ public class JavaPluginLoader implements PluginLoader
                         ((InventoryListener) listener).onInventoryTransaction((InventoryTransactionEvent) event);
                     }
                 };
-            
+
             // Player Events
 
             case PLAYER_JOIN:
@@ -620,9 +621,18 @@ public class JavaPluginLoader implements PluginLoader
                     }
                 };
             case PLAYER_CHANGED_WORLD:
-                return new EventExecutor() {
+                return new EventExecutor()
+                {
                     public void execute(Listener listener, Event event) {
                         ((PlayerListener) listener).onPlayerChangedWorld((PlayerChangedWorldEvent) event);
+                    }
+                };
+            case PLAYER_STATISTIC:
+                return new EventExecutor()
+                {
+                    public void execute(Listener listener, Event event)
+                    {
+                        ((PlayerListener) listener).onPlayerStatistic((PlayerStatisticEvent) event);
                     }
                 };
 

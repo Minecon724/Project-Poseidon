@@ -337,6 +337,12 @@ public abstract class Event implements Serializable {
          * @see org.bukkit.event.player.PlayerItemDamageEvent
          */
         PLAYER_ITEM_DAMAGE(Category.PLAYER),
+        /**
+         * Called when a player has a statistic updated
+         *
+         * @see com.legacyminecraft.poseidon.event.PlayerStatisticEvent
+         */
+        PLAYER_STATISTIC(Category.PLAYER),
 
         /**
          * BLOCK EVENTS

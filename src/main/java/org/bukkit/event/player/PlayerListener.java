@@ -1,5 +1,6 @@
 package org.bukkit.event.player;
 
+import com.legacyminecraft.poseidon.event.PlayerStatisticEvent;
 import org.bukkit.event.Listener;
 
 /**
@@ -205,4 +206,11 @@ public class PlayerListener implements Listener {
      * @param event Relevant event details
      */
     public void onPlayerItemDamage(PlayerItemDamageEvent event) {}
+
+    /**
+     * Called when a player has a statistic updated
+     *
+     * @param event Relevant event details
+     */
+    public void onPlayerStatistic(PlayerStatisticEvent event) {}
 }
