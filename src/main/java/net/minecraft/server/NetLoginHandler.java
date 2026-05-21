@@ -96,7 +96,6 @@ public class NetLoginHandler extends NetHandler {
             return;
         }
         receivedLoginPacket = true;
-        this.g = packet1login.name;
 
         // Kick players if they are using the wrong version
         if (packet1login.a != 14) {
@@ -114,6 +113,8 @@ public class NetLoginHandler extends NetHandler {
         }
 
         this.finishLogin(packet1login);
+
+        this.g = packet1login.name;
     }
 
     public void updateUsername(String newUsername) {
