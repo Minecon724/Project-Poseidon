@@ -10,6 +10,6 @@ import org.bukkit.generator.BlockPopulator;
  */
 public class ChunkPopulateEvent extends ChunkEvent {
     public ChunkPopulateEvent(final Chunk chunk) {
-        super(Type.CHUNK_POPULATED, chunk);
+        super(Type.CHUNK_POPULATE, chunk);
     }
 }

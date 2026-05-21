@@ -837,7 +837,7 @@ public class JavaPluginLoader implements PluginLoader
                     }
                 };
 
-            case CHUNK_POPULATED:
+            case CHUNK_POPULATE:
                 return new EventExecutor()
                 {
                     public void execute(Listener listener, Event event)
