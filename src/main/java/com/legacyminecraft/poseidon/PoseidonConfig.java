@@ -228,6 +228,9 @@ public class PoseidonConfig extends Configuration {
         generateConfigOption("settings.update-checker.interval.ticks", 20 * 60 * 60);
         generateConfigOption("settings.update-checker.interval.info", "Controls how often the update checker will query the latest Poseidon version");
 
+        generateConfigOption("settings.required-plugins.list", List.of());
+        generateConfigOption("settings.required-plugins.info", "List of plugins that must exist and be enabled successfully for the server to accept logins");
+
         //Messages
         generateConfigOption("message.kick.banned", "You are banned from this server!");
         generateConfigOption("message.kick.ip-banned", "Your IP address is banned from this server!");

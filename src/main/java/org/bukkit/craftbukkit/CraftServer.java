@@ -77,6 +77,7 @@ public final class CraftServer implements Server {
     // Project Poseidon - Start
     private volatile boolean shuttingdown = false;
     private final List<String> hiddenCommands = new ArrayList<>();
+    private final List<String> requiredPlugins = PoseidonConfig.getInstance().getStringList("settings.required-plugins.list", List.of());
 
     // Project Poseidon - End
 
@@ -152,11 +153,19 @@ public final class CraftServer implements Server {
         for (Plugin plugin : plugins) {
             // Re-evaluate every disabled plugin on each phase so deferred dependencies can come alive later.
             if (!plugin.isEnabled() && shouldAttemptEnable(plugin, type)) {
-                enablePlugin(plugin, type, new LinkedHashSet<String>());
+                var enabled = enablePlugin(plugin, type, new LinkedHashSet<String>());
+
+                if (requiredPlugins.remove(plugin.getDescription().getName()) && !enabled) {
+                    throw new IllegalStateException("Required plugin " + plugin.getDescription().getName() + " is not enabled");
+                }
             }
         }
 
         if (type == PluginLoadOrder.POSTWORLD) {
+            if (!requiredPlugins.isEmpty()) {
+                throw new IllegalStateException("Missing required plugins: " + String.join(", ", requiredPlugins));
+            }
+
             commandMap.registerServerAliases();
             loadCustomPermissions();
             DefaultPermissions.registerCorePermissions();
