@@ -85,18 +85,8 @@ public final class SimplePluginManager implements PluginManager {
             for (Map.Entry<Class<? extends Event>, Set<RegisteredListener>> entry : plugin.getPluginLoader().createRegisteredListeners(listener, plugin).entrySet()) {
                 Class<? extends Event> clazz = entry.getKey();
                 Event.Type type = Event.Type.getTypeByName(clazz.getSimpleName().substring(0, clazz.getSimpleName().indexOf("Event")));
-                if (type != null) {
-                    getEventListeners(type).addAll(entry.getValue());
-                } else {
-                    //If listener implements PoseidonCustomListener, we can be sure it is probably a custom event.
-                    if (listener instanceof PoseidonCustomListener) {
-                        server.getLogger().log(Level.INFO, plugin.getDescription().getName() + " is utilizing event handlers to receive the custom event " + clazz.getSimpleName() + ". Please be aware this is a hacky beta feature.");
-                        getEventListeners(Event.Type.CUSTOM_EVENT).addAll(entry.getValue());
-                    } else {
-                        String cName = clazz.getName();
-                        server.getLogger().log(Level.SEVERE, String.format("Class %s failed to get Event.Type on @EventHandler", cName));
-                    }
-                }
+                if (type == null) type = Event.Type.CUSTOM_EVENT;
+                getEventListeners(type).addAll(entry.getValue());
 
             }
 
