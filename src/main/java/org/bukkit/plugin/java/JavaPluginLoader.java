@@ -267,6 +267,10 @@ public class JavaPluginLoader implements PluginLoader
             }
 
             final EventExecutor executor = (listener1, event) -> {
+                if (event.getType() == Event.Type.CUSTOM_EVENT && !eventClass.isInstance(event)) {
+                    return;
+                }
+
                 try {
                     method.invoke(listener1, event);
                 } catch (IllegalAccessException | InvocationTargetException e) {
