@@ -397,7 +397,7 @@ public final class SimplePluginManager implements PluginManager {
                         ));
                     }
                 } catch (Throwable ex) {
-                    server.getLogger().log(Level.SEVERE, "Could not pass event " + event.getType() + " to " + registration.getPlugin().getDescription().getName(), ex);
+                    server.getLogger().log(Level.SEVERE, "Could not pass event " + event.getType() + " to " + registration.getListener().getClass().getName() + " in " + registration.getPlugin().getDescription().getName(), ex);
                 }
             }
         }
