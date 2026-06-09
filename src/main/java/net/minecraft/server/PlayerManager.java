@@ -100,7 +100,7 @@ public class PlayerManager {
     public void removePlayer(EntityPlayer entityplayer) {
         int i = (int) entityplayer.d >> 4;
         int j = (int) entityplayer.e >> 4;
-        int viewDistance = entityplayer.viewDistance;
+        int viewDistance = entityplayer.getEffectiveViewDistance();
 
         for (int k = i - viewDistance; k <= i + viewDistance; ++k) {
             for (int l = j - viewDistance; l <= j + viewDistance; ++l) {
@@ -162,7 +162,7 @@ public class PlayerManager {
         int i1 = i - k;
         int j1 = j - l;
 
-        int viewDistance = entityplayer.viewDistance;
+        int viewDistance = entityplayer.getEffectiveViewDistance();
         for (int k1 = i - viewDistance; k1 <= i + viewDistance; ++k1) {
             for (int l1 = j - viewDistance; l1 <= j + viewDistance; ++l1) {
                 if (!this.a(k1, l1, k, l, entityplayer.prevViewDistance)) {

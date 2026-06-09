@@ -600,5 +600,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public String toString() {
         return super.toString() + "(" + this.name + " at " + this.locX + "," + this.locY + "," + this.locZ + ")";
     }
+
+    public int getEffectiveViewDistance() {
+        return locY > 50 ? viewDistance : 4;
+    }
     // CraftBukkit end
 }
