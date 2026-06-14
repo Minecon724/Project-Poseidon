@@ -262,6 +262,8 @@ public final class SimplePluginManager implements PluginManager {
 
     public void enablePlugin(final Plugin plugin) {
         if (!plugin.isEnabled()) {
+            server.getLogger().info("[PluginManager] Enabling " + plugin.getDescription().getFullName());
+
             List<Command> pluginCommands = PluginCommandYamlParser.parse(plugin);
 
             if (!pluginCommands.isEmpty()) {
@@ -307,6 +309,8 @@ public final class SimplePluginManager implements PluginManager {
 
     public void disablePlugin(final Plugin plugin) {
         if (plugin.isEnabled()) {
+            server.getLogger().info("[PluginManager] Disabling " + plugin.getDescription().getFullName());
+
             try {
                 plugin.getPluginLoader().disablePlugin(plugin);
             } catch (Throwable ex) {
